@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Lista de Contactos</title>
+<!-- Bootstrap css -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+</head>
+<body>	
+	
+<div class="container">
+
+<div th:if="${msgExito !=null}" class="alert alert-success alert-dismissible">
+	[[${msgExito}]]
+	<button type="button" class="btn btn-close" data-bs-dismiss="alert"></button>	
+</div>
+	
+	<h1>Lista de Contactos</h1>
+	
+	<div class="text-center my-3">
+		<a href="/contacto/nuevo" class="btn btn-primary"> <i class="fas fa-user-plus"></i>&nbsp;Añadir contacto</a>
+	</div>
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Nombre</th>
+				<th>Celular</th>
+				<th>Email</th>
+				<th>F.Nacimiento</th>
+				<th>F.Registro</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="con: ${listadoContactos}">
+				<td th:text="${con.id}"></td>
+				<td th:text="${con.nombre}"></td>
+				<td th:text="${con.celular}"></td>
+				<td th:text="${con.email}"></td>
+				<td th:text="${#temporals.format(con.fechaNacimiento, 'dd/MM/YYYY')}"></td>
+				<td th:text="${#temporals.format(con.fechaRegistro, 'dd/MM/YYYY hh:mm a')}"></td>
+				<td class="text-end">
+					<a th:href="@{/editar/{idContacto}/(idContacto=${con.id})}" class="btn btn-warning"><i class="fas fa-edit"></i>&nbsp;Editar</a>
+					
+					<a href="#" onclick="eliminarContacto(this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i>&nbsp;Eliminar</a>
+					<form th:action="@{/eliminar/{idContacto}/(idContacto=${con.id})}" method="post"></form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	
+</div>
+	<script>
+		function eliminarContacto(elementoHTML){
+			
+			var ok = confirm('¿Estás seguro de eliminar contacto?');
+			
+			if (ok==true){
+				elementoHTML.nextElementSibling.submit();
+			}
+			
+		}
+	</script>	
+</body>
+</html>
